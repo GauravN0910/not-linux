@@ -6,7 +6,7 @@
 
 #[cfg(test)]
 pub fn test_runner(tests: &[&dyn Fn()]) {
-    println!("Running {} tests", tests.len());
+    serial_println!("Running {} tests", tests.len());
     for test in tests {
         test();
     }
@@ -16,6 +16,7 @@ pub fn test_runner(tests: &[&dyn Fn()]) {
 use core::panic::PanicInfo;
 
 mod vga_buffer;
+mod serial;
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
@@ -24,9 +25,9 @@ fn panic(_info: &PanicInfo) -> ! {
 
 #[test_case]
 fn sample_test() {
-    print!("Sample Test = ");
+    serial_print!("Sample Test = ");
     assert_eq!(1, 1);
-    println!("Mudinch");
+    serial_println!("Successful");
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
