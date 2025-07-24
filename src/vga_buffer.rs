@@ -37,6 +37,28 @@ pub fn _print(args: fmt::Arguments) {
     WRITER.lock().write_fmt(args).unwrap();
 }
 
+#[test_case]
+fn test_println_single() {
+    println!("simple prinln output");
+}
+
+#[test_case]
+fn test_println_multiple() {
+    for i in 0..200 {
+        println!("println number {}", i);
+    }
+}
+
+#[test_case]
+fn test_println_output() {
+    let s = "oracle cloud infrastructure";
+    println!("{}", s);
+    for (i, x) in s.chars().enumerate() {
+        let screen_char = WRITER.lock().buffer.chars[BUFFER_HEIGHT - 2][i].read();
+        assert_eq!(char::from(screen_char.ascii_character), x);
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(transparent)]
 struct ColorCode(u8);
