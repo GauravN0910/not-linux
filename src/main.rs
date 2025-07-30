@@ -11,7 +11,7 @@ use not_linux::println;
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
-    loop {}
+    not_linux::hlt_loop();
 }
 
 #[cfg(test)]
@@ -23,12 +23,20 @@ fn panic(info: &PanicInfo) -> ! {
 pub extern "C" fn _start() -> ! {
     use core::fmt::Write;
     not_linux::vga_buffer::WRITER.lock().write_str("Welcome to Not-Linux\n").unwrap();
-    write!(not_linux::vga_buffer::WRITER.lock(), "Printed using Rust FMT\n").unwrap();
-    println!("Printed using println macro");
+
+    not_linux::init();
+    
+    // unsafe {
+        // *(0xDEADBEEF as *mut u8) = 42;
+    // }
+
+    // x86_64::instructions::interrupts::int3();
 
     #[cfg(test)]
     test_main();
-    loop {}
+
+    println!("It did not crash!");
+    not_linux::hlt_loop();
 }
 
 
