@@ -8,7 +8,6 @@ use core::panic::PanicInfo;
 use not_linux::println;
 use bootloader::{BootInfo, entry_point};
 extern crate alloc;
-use alloc::{boxed::Box, vec::Vec};
 
 #[cfg(not(test))]
 #[panic_handler]
@@ -44,19 +43,10 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
 
     allocator::init_heap(&mut mapper, &mut frame_allocator)
         .expect("heap allocation failed");
-    let x = Box::new(41);
-    println!("value x is at {:p}", x);
-
-    let mut vec = Vec::new();
-    for i in 0..500 {
-        vec.push(i);
-    }
-    println!("vector is at {:p}", vec.as_slice());
 
     #[cfg(test)]
     test_main();
 
-    println!("It did not crash!");
     not_linux::hlt_loop();
 }
 
